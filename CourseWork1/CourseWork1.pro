@@ -26,6 +26,7 @@ HEADERS  += mainwindow.h \
     controller.h \
     linearregression.h \
     Utils.h \
-    qcustomplot.h
+    qcustomplot.h \
+    ifittingtechnique.h
 
 FORMS    += mainwindow.ui

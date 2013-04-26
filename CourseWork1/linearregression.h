@@ -3,11 +3,12 @@
 
 #include<vector>
 #include<math.h>
+#include "ifittingtechnique.h"
 #include "Utils.h"
 
 using namespace std;
 
-class LinearRegression
+class LinearRegression: public IFittingTechnique
 {
     public:
         LinearRegression();
@@ -15,7 +16,7 @@ class LinearRegression
         ~LinearRegression();
 
         void applyFittingTechnique();
-
+        vector<Point> getFitPoints();
         vector<Point> getPoints() { return points_;}
         void setPoints(vector<Point> points) { points_ = points;}
 

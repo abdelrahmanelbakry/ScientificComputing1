@@ -14,7 +14,18 @@ LinearRegression::~LinearRegression()
     //that is going to clear all the data used
     points_.clear();
 }
-
+vector<Point> LinearRegression::getFitPoints()
+{
+    vector<Point> fitPoints;
+    for(int i=0;i<points_.size();i++)
+    {
+        Point newPoint;
+        newPoint.setX(points_[i].getX());
+        newPoint.setY( (a0 + a1*points_[i].getX()));
+        fitPoints.push_back(newPoint);
+    }
+    return fitPoints;
+}
 void LinearRegression::applyFittingTechnique()
 {
     //As The algorithm can't run on less than two points.
