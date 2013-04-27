@@ -18,7 +18,8 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     controller.cpp \
     linearregression.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    polynomialregrssion.cpp
 
 HEADERS  += mainwindow.h \
     cmatrix.h \
@@ -27,6 +28,9 @@ HEADERS  += mainwindow.h \
     linearregression.h \
     Utils.h \
     qcustomplot.h \
-    ifittingtechnique.h
+    ifittingtechnique.h \
+    polynomialregrssion.h \
+    imatrixsolver.h \
+    gaussmatsolverwithpp.h
 
 FORMS    += mainwindow.ui

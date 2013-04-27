@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -46,6 +46,7 @@
       <string>Run Technique</string>
      </property>
      <addaction name="actionLinear_Regression"/>
+     <addaction name="actionPolynominal_Regression"/>
     </widget>
     <addaction name="action_Load_Input"/>
     <addaction name="menuRun_Technique"/>
@@ -88,6 +89,11 @@
   <action name="actionLinear_Regression">
    <property name="text">
     <string>Linear Regression</string>
+   </property>
+  </action>
+  <action name="actionPolynominal_Regression">
+   <property name="text">
+    <string>Polynominal Regression</string>
    </property>
   </action>
  </widget>

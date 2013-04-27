@@ -33,7 +33,11 @@ class cVector
         cVector(int size, const T *a) // Initialize to array
         {
             size_ = size;
-            values_ = a;
+            values_ = new T[size];
+            for(int i=0;i<size;i++)
+            {
+                values_[i] = a[i];
+            }
         }
         cVector(const cVector &rhs) // Copy constructor
         {
@@ -46,7 +50,8 @@ class cVector
         }
 
         cVector & operator=(const cVector &rhs) //assignment
-        {
+        {            
+
             return new cVector(rhs);
         }
 

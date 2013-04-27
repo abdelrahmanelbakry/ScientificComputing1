@@ -79,10 +79,22 @@ class cMatrix
             if(i<numberOfRows_)
                 return mat[i];
         }
+
         inline int getNumberOfRows() const
         {
             return numberOfRows_;
         }
+
+        double getCellValue(int rr, int cc)
+        {
+            return mat[rr][cc];
+        }
+
+        void modifyCellValue (int rr, int cc, const T &value)
+        {
+            mat[rr][cc] = value;
+        }
+
         inline int getNumberOfColumns() const
         {
             return numberOfCols_;

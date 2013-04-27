@@ -22,6 +22,10 @@ private slots:
 
     void on_actionLinear_Regression_triggered();
 
+    void on_actionQuit_triggered();
+
+    void on_actionPolynominal_Regression_triggered();
+
 private:
     Ui::MainWindow *ui;
     void openFile();
