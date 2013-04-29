@@ -49,7 +49,7 @@ void Controller::ReadInput(const char *filename)
         {
             for(int i=0;i<setSize;i++)
             {
-                int xCord,yCord;
+                double xCord,yCord;
                 inputSream>>xCord>>yCord;
                 tmpPoint.setX(xCord);
                 tmpPoint.setY(yCord);
@@ -65,6 +65,9 @@ vector<Point> Controller::applyCurveFitting(Technique technique)
     {
         case LINEAR_REG:
             fittechnique = new LinearRegression(inputPoints);
+            break;
+        case POLY_REG:
+            fittechnique = new PolynomialRegrssion(inputPoints,3);
             break;
     }
 

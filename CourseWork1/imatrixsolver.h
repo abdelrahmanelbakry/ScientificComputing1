@@ -7,7 +7,7 @@ template <class T>
 class iMatrixSolver
 {
 public:
-    virtual cVector<T> solve(cMatrix<T> *matrix, double tolerance,double error)=0;
+    virtual void solve(cMatrix<T> *matrix,cVector<T> *bVec,cVector<T>* xVec, double tolerance,double *error)=0;
 };
 
 #endif // IMATRIXSOLVER_H

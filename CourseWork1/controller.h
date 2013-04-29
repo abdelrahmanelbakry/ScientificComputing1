@@ -8,6 +8,7 @@
 #include "cmatrix.h"
 #include "cvector.h"
 #include "linearregression.h"
+#include "polynomialregrssion.h"
 
 using namespace std;
 

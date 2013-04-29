@@ -1,8 +1,13 @@
 #ifndef POLYNOMIALREGRSSION_H
 #define POLYNOMIALREGRSSION_H
 #include<math.h>
+#include<fstream>
+
+#include "gaussmatsolverwithpp.h"
 #include"cmatrix.h"
 #include"ifittingtechnique.h"
+
+using namespace std;
 
 class PolynomialRegrssion : public IFittingTechnique
 {
@@ -19,13 +24,11 @@ public:
     int getDegree() { return degree_; }
 private:
     cMatrix<double> * solutionMatrix_;
+    iMatrixSolver<double>* matrixSolver_;
     int degree_;
     vector<Point> points_;
     double residualError_;
-    double lineMean_;
-    double lineStandardDeviation_;
-    double correlationCofficient_;
-    double a1,a0;
+
 };
 
 #endif // POLYNOMIALREGRSSION_H

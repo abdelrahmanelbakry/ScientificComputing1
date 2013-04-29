@@ -49,12 +49,22 @@ class cVector
             }
         }
 
-        cVector & operator=(const cVector &rhs) //assignment
-        {            
-
+        cVector * operator=(const cVector &rhs) //assignment
+        {
             return new cVector(rhs);
         }
 
+        T getValueAtIndex(const int index)
+        {
+            if(index<size_)
+                return values_[index];
+        }
+
+        void setValueAtIndex(const int index,T value)
+        {
+            if(index<size_)
+                values_[index] = value;
+        }
         inline T & operator[](const int index) //i'th element
         {
             if(index<size_)

@@ -153,8 +153,9 @@ class cMatrix
             {
                 for(int j=0;j<numberOfCols_;j++)
                 {
-                    itoa(mat[i][j],buffer,10);
+                    sprintf(buffer,"%g",mat[i][j]);
                     ret+=buffer;
+                    ret+="";
                 }
                 ret+="\n";
             }

@@ -1,0 +1,12 @@
+#Created by: Abdelrahman 
+#Version: 1.0
+#Linear Regression Set
+#Number Of Points in the Set
+6
+#The Co-ordinates in format X Y
+0 2.1
+1 7.7
+2 13.6
+3 27.2
+4 40.9
+5 61.1
