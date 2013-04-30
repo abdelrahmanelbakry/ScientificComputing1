@@ -1,12 +1,19 @@
 #include "controller.h"
+#include "Interpolation.cpp"
+#include "Cubic.cpp"
+#include "gaussmatsolverwithpp.h"
+#include "imatrixsolver.h"
 
 Controller* sharedController = 0;
 Controller::Controller()
 {
+    fittechnique = 0;
 }
 Controller::~Controller()
 {
-    delete fittechnique;
+    if(fittechnique!=0)
+        delete fittechnique;
+
     delete sharedController;
     sharedController = 0;
 }
@@ -67,10 +74,171 @@ vector<Point> Controller::applyCurveFitting(Technique technique)
             fittechnique = new LinearRegression(inputPoints);
             break;
         case POLY_REG:
-            fittechnique = new PolynomialRegrssion(inputPoints,3);
+            fittechnique = new PolynomialRegrssion(inputPoints,2);
             break;
     }
 
     fittechnique->applyFittingTechnique();
     return fittechnique->getFitPoints();
+}
+
+
+vector<Point> Controller::applyNewtonInterpol()
+{
+    cVector<double> Input_X = cVector<double> (inputPoints.size());
+    cVector<double> Input_Y = cVector<double> (inputPoints.size());
+    Point var_point;
+    for (int i =0; i<inputPoints.size(); i++)
+    {
+       var_point = inputPoints[i];
+       Input_X[i] = var_point.getX();
+       Input_Y[i] = var_point.getY();
+    }
+    cVector<double> resultNewton = NewtonInterPolation (inputPoints.size(),Input_X,Input_Y );
+
+    var_point = inputPoints[0];
+    double X_start = var_point.getX();
+    var_point = inputPoints[inputPoints.size()-1];
+    double X_end = var_point.getX();
+    double Interval =0.5;
+    int count_X = ceil ((X_end-X_start )/Interval)+1;
+
+    cVector<double> X_Plot = cVector<double> (count_X);
+    cVector<double> Y_Plot = cVector<double> (count_X);
+    X_Plot[0] = X_start;
+    X_Plot[count_X -1] = X_end;
+    for (int i=1; i<(count_X-1) ; i++)
+    {
+        X_Plot[i] = X_Plot[i-1] + Interval;
+    }
+    //Calculate Error
+   // cVector <double> ErrorNewton = cVector<double> (inputPoints.size());
+
+
+    // Calculate Y_Plot
+    for (int i=0; i< X_Plot.size(); i++)
+    {
+        Y_Plot[i] = resultNewton[0];
+        double varfactor = 1;
+        for (int j=1; j< Input_X.size(); j++)
+        {
+            varfactor = varfactor * (X_Plot[i] - Input_X[j-1]);
+            Y_Plot[i] = Y_Plot[i] + varfactor * resultNewton[j];
+        }
+
+    }
+    //Calculate Error at each input point
+    cVector <double> ErrorNewton = cVector<double> (inputPoints.size());
+    ofstream log("log.txt",ios_base::app);
+
+    for (int i=0; i< Input_X.size(); i++)
+    {
+        double Calculated = resultNewton[0];
+        double varfactor = 1;
+        for (int j=1; j< Input_X.size(); j++)
+        {
+            varfactor = varfactor * (X_Plot[i] - Input_X[j-1]);
+            Calculated = Calculated + varfactor * resultNewton[j];
+        }
+        ErrorNewton [i] = Calculated - Input_X[i];
+        log<<ErrorNewton[i]<<endl;
+    }
+
+    vector<Point> returnpoints = vector<Point>(count_X);
+    for (int i=0; i<count_X ; i++)
+    {
+        var_point.setX(X_Plot[i]);
+        var_point.setY(Y_Plot[i]);
+        returnpoints[i] = var_point;
+    }
+ return returnpoints;
+
+}
+
+vector<Point> Controller::applyCubicSpline()
+{
+    cVector<double> Input_X = cVector<double> (inputPoints.size());
+    cVector<double> Input_Y = cVector<double> (inputPoints.size());
+    Point var_point;
+    for (int i =0; i<inputPoints.size(); i++)
+    {
+       var_point = inputPoints[i];
+       Input_X[i] = var_point.getX();
+       Input_Y[i] = var_point.getY();
+    }
+    cMatrix<double> linear_equation_set = cMatrix<double> ( 4*(inputPoints.size()-1), 4*(inputPoints.size()-1) +1);
+    CubicSpline (inputPoints.size(), Input_X, Input_Y, &linear_equation_set );
+//    Assume 4n Matrix is ready with coeffecients Result_Splines cVector<double>
+//    Apply Matrix Solver
+    //
+    cVector<double> Result_Splines = cVector<double> (4*(inputPoints.size()-1));
+    cVector<double> bVec = cVector<double> (4*(inputPoints.size()-1));
+    cMatrix<double> solutionMatrix_ = cMatrix<double> ( 4*(inputPoints.size()-1), 4*(inputPoints.size()-1) );
+    for (int i=0; i<4*(inputPoints.size()-1); i++)
+    {
+        bVec[i] =linear_equation_set.getCellValue( i,4*(inputPoints.size()-1));
+        for (int j=0;j<4*(inputPoints.size()-1);j++ )
+        {
+             solutionMatrix_ [i][j] = linear_equation_set.getCellValue( i,j);
+        }
+    }
+
+    double error;
+    GaussMatSolverWithPP<double> solverobject = GaussMatSolverWithPP<double>();
+    solverobject.solve(&solutionMatrix_,&bVec,&Result_Splines,0.0001,&error);
+
+//  for (int i=0; i<Result_Splines.size();i++)
+//  Result_Splines[i] = 1;
+//  Below was Tested & Okay
+    var_point = inputPoints[0];
+    double X_start = var_point.getX();
+    var_point = inputPoints[inputPoints.size()-1];
+    double X_end = var_point.getX();
+    double Interval =0.5;
+    int count_X = ceil ((X_end-X_start )/Interval)+1;
+
+    cVector<double> X_Plot = cVector<double> (count_X);
+    cVector<double> Y_Plot = cVector<double> (count_X);
+    X_Plot[0] = X_start;
+    X_Plot[ count_X -1] = X_end;
+    for (int i=1; i<(count_X-1) ; i++)
+    {
+        X_Plot[i] = X_Plot[i-1] + Interval;
+    }
+    // Obtain Y_Plot
+    int g = 0;
+    double X_compare = Input_X[g+1];
+    for (int i=0; i<X_Plot.size(); i++)
+    {
+        Y_Plot[i] = Result_Splines[0+4*g]*pow(X_Plot[i],3)+ Result_Splines[1+4*g]*pow(X_Plot[i],2)+Result_Splines[2+4*g]*X_Plot[i]+Result_Splines[3+4*g];
+        if( X_Plot[i] >X_compare)
+        {
+            g++;
+            X_compare = Input_X[g+1];
+        }
+    }
+/*
+    // Calculate Error at each input point
+    cVector <double> ErrorCubic = cVector<double> (inputPoints.size());
+
+    g = 0;
+    X_compare = Input_X[g+1];
+    for (int i=0; i<Input_X.size(); i++)
+    {
+        ErrorCubic = Input_Y[i] - (Result_Splines[0+4*g]*pow(Input_X[i],3)+ Result_Splines[1+4*g]*pow(Input_X,2)+Result_Splines[2+4*g]*Input_X[i]+Result_Splines[3+4*g]);
+        if( X_Plot[i] >X_compare)
+        {
+            g++;
+            X_compare = Input_X[g+1];
+        }
+    }*/
+
+ vector<Point> returnpoints = vector<Point>(count_X);
+ for (int i=0; i<count_X ; i++)
+ {
+   var_point.setX(X_Plot[i]);
+   var_point.setY(Y_Plot[i]);
+   returnpoints[i] = var_point;
+ }
+ return returnpoints;
 }

@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     controller.cpp \
     linearregression.cpp \
     qcustomplot.cpp \
-    polynomialregrssion.cpp
+    polynomialregrssion.cpp \
+    Cubic.cpp \
+    Interpolation.cpp \
+    newtoninterpolation.cpp
 
 HEADERS  += mainwindow.h \
     cmatrix.h \
@@ -31,6 +34,7 @@ HEADERS  += mainwindow.h \
     ifittingtechnique.h \
     polynomialregrssion.h \
     imatrixsolver.h \
-    gaussmatsolverwithpp.h
+    gaussmatsolverwithpp.h \
+    newtoninterpolation.h
 
 FORMS    += mainwindow.ui

@@ -18,27 +18,39 @@ vector<Point> PolynomialRegrssion::getFitPoints()
 {
 
     vector<Point> fitPoints;
-    /*for(int i=0;i<points_.size();i++)
+    for(int i=0;i<points_.size();i++)
     {
         Point newPoint;
         newPoint.setX(points_[i].getX());
-        newPoint.setY( (a0 + a1*points_[i].getX()));
+        double yVal=0;
+        int p=1;
+        for(int j=0;j<degree_+1;j++,p++)
+            yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),p);
+
+        newPoint.setY(yVal);
         fitPoints.push_back(newPoint);
-    }*/
+    }
     return fitPoints;
 }
 void PolynomialRegrssion::applyFittingTechnique()
 {
     //As The algorithm can't run on less than the number of points.
 
-    if(points_.empty() || points_.size()<degree_)
+    if(points_.empty() || points_.size()<degree_+1)
         return;
 
-    solutionMatrix_ = new cMatrix<double>(degree_,degree_,0.0);
-    double sum=0;
-    cVector<double>* bVec = new cVector<double>(degree_,0.0);
+    double sumY=0;
+    for(int i=0;i<points_.size();i++)
+        sumY+= points_[i].getY();
 
-    for(int i=1;i<degree_+1;i++)
+
+    double yMean = sumY/points_.size();
+
+    solutionMatrix_ = new cMatrix<double>(degree_+1,degree_+1,0.0);
+    double sum=0;
+    cVector<double>* bVec = new cVector<double>(degree_+1,0.0);
+
+    for(int i=1;i<=degree_+1;i++)
     {
         for(int j=1;j<=i;j++)
         {
@@ -56,19 +68,40 @@ void PolynomialRegrssion::applyFittingTechnique()
         bVec->setValueAtIndex(i-1, sum);
        // solutionMatrix_->modifyCellValue(i,degree_+2,sum);
     }
-    double error=0;
 
+    residualError_=0;
+    lineMean_=0;
     ofstream log("log.txt",ios_base::app);
     log<<solutionMatrix_->toString()<<endl;
 
     matrixSolver_ = new GaussMatSolverWithPP<double>();
 
-    cVector<double>* xVec = new cVector<double> (degree_,0.0);
+    xVec = new cVector<double> (degree_+1,0.0);
     log<<bVec->getValueAtIndex(0)<<" "<<bVec->getValueAtIndex(1)<<" "<<bVec->getValueAtIndex(2)<<endl;
 
+    double error=0;
     matrixSolver_->solve(solutionMatrix_,bVec,xVec,0.0001,&error);
 
     log<<xVec->getValueAtIndex(0)<<" "<<xVec->getValueAtIndex(1)<<" "<<xVec->getValueAtIndex(2)<<endl;
 
+    for(int i=0;i<points_.size();i++)
+    {
+        double yVal=0;
+        int p=1;
+        for(int j=0;j<degree_+1;j++,p++)
+            yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),p);
+
+        log<<"Error for point: "<<(points_[i].getY() - yVal)<<endl;
+        residualError_ +=  ((points_[i].getY() - yVal) * (points_[i].getY() - yVal));
+        lineMean_+= (points_[i].getY() - yMean)*(points_[i].getY() - yMean);
+
+    }
+    if(points_.size()>=3)
+        lineStandardDeviation_= sqrt(residualError_/ (points_.size()-(degree_+1)) );
+
+    correlationCofficient_ = (lineMean_ - residualError_) / lineMean_;
+
+    log<<"Residual Error For Poly Reg: "<<residualError_<<endl;
+    log<<"Correlation Co For Poly Reg: "<<correlationCofficient_<<endl;
 
 }

@@ -24,10 +24,14 @@ public:
     int getDegree() { return degree_; }
 private:
     cMatrix<double> * solutionMatrix_;
+    cVector<double>* xVec;
     iMatrixSolver<double>* matrixSolver_;
     int degree_;
     vector<Point> points_;
     double residualError_;
+    double lineMean_;
+    double lineStandardDeviation_;
+    double correlationCofficient_;
 
 };
 

@@ -3,6 +3,7 @@
 
 #include<vector>
 #include<math.h>
+#include<fstream>
 #include "ifittingtechnique.h"
 #include "Utils.h"
 

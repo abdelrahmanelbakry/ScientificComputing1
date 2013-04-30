@@ -26,6 +26,8 @@ class Controller
         ~Controller();
         vector<Point> getInputPoints() { return inputPoints;}
         vector<Point> applyCurveFitting(Technique technique);
+        vector<Point> applyNewtonInterpol();
+        vector<Point> applyCubicSpline();
         void ReadInput(const char* filename);
 };
 

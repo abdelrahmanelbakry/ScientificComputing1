@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
-    <height>400</height>
+    <width>804</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>661</width>
-      <height>351</height>
+      <width>801</width>
+      <height>421</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -33,8 +33,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>667</width>
-     <height>22</height>
+     <width>804</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -47,8 +47,11 @@
      </property>
      <addaction name="actionLinear_Regression"/>
      <addaction name="actionPolynominal_Regression"/>
+     <addaction name="actionNewton_Interpolation"/>
+     <addaction name="actionCubic_Splines"/>
     </widget>
     <addaction name="action_Load_Input"/>
+    <addaction name="actionClear"/>
     <addaction name="menuRun_Technique"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -94,6 +97,21 @@
   <action name="actionPolynominal_Regression">
    <property name="text">
     <string>Polynominal Regression</string>
+   </property>
+  </action>
+  <action name="actionNewton_Interpolation">
+   <property name="text">
+    <string>Newton Interpolation</string>
+   </property>
+  </action>
+  <action name="actionCubic_Splines">
+   <property name="text">
+    <string>Cubic Splines</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="text">
+    <string>Clear</string>
    </property>
   </action>
  </widget>

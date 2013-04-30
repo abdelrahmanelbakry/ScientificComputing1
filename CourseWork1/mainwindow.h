@@ -26,10 +26,18 @@ private slots:
 
     void on_actionPolynominal_Regression_triggered();
 
+    void on_actionNewton_Interpolation_triggered();
+
+    void on_actionCubic_Splines_triggered();
+
+    void on_actionAbout_triggered();
+
+    void on_actionClear_triggered();
+
 private:
     Ui::MainWindow *ui;
     void openFile();
-
+    int currentGraph_;
 };
 
 #endif // MAINWINDOW_H

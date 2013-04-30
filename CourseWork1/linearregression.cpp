@@ -48,6 +48,8 @@ void LinearRegression::applyFittingTechnique()
     a1 = (points_.size() * sumXY - sumX*sumY)/(points_.size()*sumX2- sumX*sumX);
     a0 = yMean - a1*xMean;
 
+    ofstream log("log.txt",ios_base::app);
+
     lineMean_=0;
     residualError_=0;
 
@@ -61,5 +63,9 @@ void LinearRegression::applyFittingTechnique()
         lineStandardDeviation_= sqrt(residualError_/ (points_.size()-2) );
 
     correlationCofficient_ = (lineMean_ - residualError_) / lineMean_;
+
+    log<<"Residual Error For Linear Reg: "<<residualError_<<endl;
+    log<<"Correlation Co For Linear Reg: "<<correlationCofficient_<<endl;
+
 
 }
