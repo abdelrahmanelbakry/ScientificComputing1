@@ -58,6 +58,7 @@ class cMatrix
             for(int i=0;i<numberOfRows_;i++)
             {
                 //mat[i] = rhs[i];
+                mat[i] = new T[numberOfCols_];
                 for(int j=0;j<numberOfCols_;j++)
                     mat[i][j] = rhs[i][j];
             }
@@ -85,7 +86,7 @@ class cMatrix
             return numberOfRows_;
         }
 
-        double getCellValue(int rr, int cc)
+        T getCellValue(int rr, int cc)
         {
             return mat[rr][cc];
         }

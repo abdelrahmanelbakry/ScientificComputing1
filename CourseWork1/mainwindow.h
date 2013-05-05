@@ -37,7 +37,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
     void openFile();
+<<<<<<< HEAD
     int currentGraph_;
+=======
+    void PlotOriginalPoints();
+    int currentGraph_;
+    bool originalPointsDrawn_;
+>>>>>>> Beta Version
 };
 
 #endif // MAINWINDOW_H

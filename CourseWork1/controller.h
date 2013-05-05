@@ -20,12 +20,16 @@ class Controller
         vector<Point> inputPoints;
         IFittingTechnique* fittechnique;
 
-
+        void RunTest();
     public:
         static Controller* getSharedController();
         ~Controller();
         vector<Point> getInputPoints() { return inputPoints;}
+<<<<<<< HEAD
         vector<Point> applyCurveFitting(Technique technique);
+=======
+        vector<Point> applyCurveFitting(Technique technique,double degree=0);
+>>>>>>> Beta Version
         vector<Point> applyNewtonInterpol();
         vector<Point> applyCubicSpline();
         void ReadInput(const char* filename);

@@ -29,7 +29,10 @@ void Controller::RunTest()
     ofstream log("log.txt");
     cVector<double> newVec = cVector<double>(3,6);
     log<<newVec[0]<<" "<<newVec[1]<<" "<<newVec[2]<<endl;
-    cVector<double> newVec2 = newVec;
+    cVector<double> newVec2 = cVector<double>(3,4);
+    cVector<double> newVec3 = cVector<double>(3,2);
+
+    //newVec = newVec2 = newVec3;
     log<<newVec2[0]<<" "<<newVec2[1]<<" "<<newVec2[2]<<endl;
     newVec[0]=7;
     newVec.resize(4);
@@ -39,10 +42,11 @@ void Controller::RunTest()
     log<<newMat.toString()<<endl;
    // char* log;
 
-}
-*/
+}*/
+
 void Controller::ReadInput(const char *filename)
 {
+    inputPoints.clear();
     ifstream inputSream(filename);
     Point tmpPoint;
     int setSize;
@@ -66,12 +70,18 @@ void Controller::ReadInput(const char *filename)
     }
     //qDebug(inputPoints.size());
 }
-vector<Point> Controller::applyCurveFitting(Technique technique)
+vector<Point> Controller::applyCurveFitting(Technique technique, double degree)
 {
     switch(technique)
     {
         case LINEAR_REG:
+            if(fittechnique != 0) delete fittechnique;
             fittechnique = new LinearRegression(inputPoints);
+
+            break;
+        case POLY_REG:
+            if(fittechnique != 0) delete fittechnique;
+            fittechnique = new PolynomialRegrssion(inputPoints,degree);
             break;
         case POLY_REG:
             fittechnique = new PolynomialRegrssion(inputPoints,2);
@@ -140,7 +150,11 @@ vector<Point> Controller::applyNewtonInterpol()
             varfactor = varfactor * (X_Plot[i] - Input_X[j-1]);
             Calculated = Calculated + varfactor * resultNewton[j];
         }
+<<<<<<< HEAD
         ErrorNewton [i] = Calculated - Input_X[i];
+=======
+        ErrorNewton [i] = Calculated - Input_Y[i];
+>>>>>>> Beta Version
         log<<ErrorNewton[i]<<endl;
     }
 
@@ -159,7 +173,14 @@ vector<Point> Controller::applyCubicSpline()
 {
     cVector<double> Input_X = cVector<double> (inputPoints.size());
     cVector<double> Input_Y = cVector<double> (inputPoints.size());
+<<<<<<< HEAD
     Point var_point;
+=======
+    ofstream log("log.txt",ios_base::app);
+    log << "  inputPoint Size:" << inputPoints.size() << " End inputPoint size \n";
+    Point var_point;
+    log << "Guten Morgen!" ;
+>>>>>>> Beta Version
     for (int i =0; i<inputPoints.size(); i++)
     {
        var_point = inputPoints[i];
@@ -167,10 +188,37 @@ vector<Point> Controller::applyCubicSpline()
        Input_Y[i] = var_point.getY();
     }
     cMatrix<double> linear_equation_set = cMatrix<double> ( 4*(inputPoints.size()-1), 4*(inputPoints.size()-1) +1);
+<<<<<<< HEAD
+=======
+    for (int i =0; i<4*(inputPoints.size()-1) ; i++)
+    {
+        for (int j=0 ; j<4*(inputPoints.size()-1) +1 ;j++)
+        {
+            linear_equation_set.modifyCellValue(i,j,0);
+        }
+    }
+>>>>>>> Beta Version
     CubicSpline (inputPoints.size(), Input_X, Input_Y, &linear_equation_set );
 //    Assume 4n Matrix is ready with coeffecients Result_Splines cVector<double>
 //    Apply Matrix Solver
     //
+<<<<<<< HEAD
+=======
+
+    // Test Result
+    log << "We will display test results" ;
+    for (int i = 0; i<4*(inputPoints.size()-1); i++)
+    {
+        for (int j=0 ; j<4*(inputPoints.size()-1) +1;j++)
+        {
+            log << " " << linear_equation_set.getCellValue(i,j);
+        }
+        log << "\n" ;
+    }
+    log << "End display test results" ;
+
+
+>>>>>>> Beta Version
     cVector<double> Result_Splines = cVector<double> (4*(inputPoints.size()-1));
     cVector<double> bVec = cVector<double> (4*(inputPoints.size()-1));
     cMatrix<double> solutionMatrix_ = cMatrix<double> ( 4*(inputPoints.size()-1), 4*(inputPoints.size()-1) );
@@ -194,7 +242,11 @@ vector<Point> Controller::applyCubicSpline()
     double X_start = var_point.getX();
     var_point = inputPoints[inputPoints.size()-1];
     double X_end = var_point.getX();
+<<<<<<< HEAD
     double Interval =0.5;
+=======
+    double Interval =0.1;
+>>>>>>> Beta Version
     int count_X = ceil ((X_end-X_start )/Interval)+1;
 
     cVector<double> X_Plot = cVector<double> (count_X);
@@ -217,7 +269,11 @@ vector<Point> Controller::applyCubicSpline()
             X_compare = Input_X[g+1];
         }
     }
+<<<<<<< HEAD
 /*
+=======
+
+>>>>>>> Beta Version
     // Calculate Error at each input point
     cVector <double> ErrorCubic = cVector<double> (inputPoints.size());
 
@@ -225,13 +281,21 @@ vector<Point> Controller::applyCubicSpline()
     X_compare = Input_X[g+1];
     for (int i=0; i<Input_X.size(); i++)
     {
+<<<<<<< HEAD
         ErrorCubic = Input_Y[i] - (Result_Splines[0+4*g]*pow(Input_X[i],3)+ Result_Splines[1+4*g]*pow(Input_X,2)+Result_Splines[2+4*g]*Input_X[i]+Result_Splines[3+4*g]);
+=======
+        ErrorCubic [i] = Input_Y[i] - (Result_Splines[0+4*g]*pow(Input_X[i],3)+ Result_Splines[1+4*g]*pow(Input_X[i],2)+Result_Splines[2+4*g]*Input_X[i]+Result_Splines[3+4*g]);
+>>>>>>> Beta Version
         if( X_Plot[i] >X_compare)
         {
             g++;
             X_compare = Input_X[g+1];
         }
+<<<<<<< HEAD
     }*/
+=======
+    }
+>>>>>>> Beta Version
 
  vector<Point> returnpoints = vector<Point>(count_X);
  for (int i=0; i<count_X ; i++)
@@ -242,3 +306,9 @@ vector<Point> Controller::applyCubicSpline()
  }
  return returnpoints;
 }
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> Beta Version

@@ -49,6 +49,12 @@ class cVector
             }
         }
 
+<<<<<<< HEAD
+=======
+        //cVector c ;
+        //c = b;
+
+>>>>>>> Beta Version
         cVector * operator=(const cVector &rhs) //assignment
         {
             return new cVector(rhs);

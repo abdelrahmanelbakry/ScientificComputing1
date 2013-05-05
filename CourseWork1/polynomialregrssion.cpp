@@ -23,9 +23,15 @@ vector<Point> PolynomialRegrssion::getFitPoints()
         Point newPoint;
         newPoint.setX(points_[i].getX());
         double yVal=0;
+<<<<<<< HEAD
         int p=1;
         for(int j=0;j<degree_+1;j++,p++)
             yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),p);
+=======
+        //int p=1;
+        for(int j=0;j<degree_+1;j++)//,p++)
+            yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),j);
+>>>>>>> Beta Version
 
         newPoint.setY(yVal);
         fitPoints.push_back(newPoint);
@@ -87,9 +93,15 @@ void PolynomialRegrssion::applyFittingTechnique()
     for(int i=0;i<points_.size();i++)
     {
         double yVal=0;
+<<<<<<< HEAD
         int p=1;
         for(int j=0;j<degree_+1;j++,p++)
             yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),p);
+=======
+        //int p=1;
+        for(int j=0;j<degree_+1;j++)//,p++)
+            yVal += xVec->getValueAtIndex(j)* pow(points_[i].getX(),j);
+>>>>>>> Beta Version
 
         log<<"Error for point: "<<(points_[i].getY() - yVal)<<endl;
         residualError_ +=  ((points_[i].getY() - yVal) * (points_[i].getY() - yVal));
